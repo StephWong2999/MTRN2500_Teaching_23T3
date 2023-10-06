@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MTRN2500 - Lab03 &lpar;Basics II &amp; Memory&rpar;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="mtrn2500---lab03-basics-ii--memory">MTRN2500 - Lab03 (Basics II &amp; Memory)</h1>
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+<p>This week's lab exercises cover:</p>
+<ul>
+<li>More C++ basics:
+<ul>
+<li>Strings and string manipulation.</li>
+<li>Enumerations.</li>
+<li>Arrays.</li>
+<li>Vectors.</li>
+<li>Pairs.</li>
+<li>Tuples.</li>
+</ul>
+</li>
+<li>Memory:
+<ul>
+<li>Storage duration.</li>
+<li>Dynamic memory allocation.</li>
+<li>Dangers of raw pointers.</li>
+<li>Smart pointers (unique and shared).</li>
+<li><code>make_unique</code> and <code>make_shared</code></li>
+<li>Passing-by-pointer</li>
+<li>References.</li>
+<li>Passing-by-reference.</li>
+</ul>
+</li>
+</ul>
+<h2 id="basics-ii">Basics II</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="exercise-string-zipping">Exercise: String Zipping</h3>
+<p>How do we define a string in C? What are the disadvantages of using a C-style string?</p>
+<p>Write a program which:</p>
+<ul>
+<li>Receives two strings, <code>str1</code> and <code>str2</code>, as inputs.</li>
+<li>Creates a new string, <code>result</code>, by <em>zipping</em> <code>str1</code> and <code>str2</code> together.</li>
+</ul>
+<blockquote>
+<p>Zipping is defined as the action of appending the first character of <code>str1</code>, then first character of <code>str2</code>, then second character of <code>str1</code>, then second character of <code>str2</code>, and so on. If any of <code>str1</code> or <code>str2</code> is exhausted, then the rest of the nonexausted string is appended.</p>
+</blockquote>
+<table>
+    <tr>
+        <th> Expected Input </th>
+        <th> Expected Output </th>
+    </tr>
+    <tr>
+        <td> <code>abc<br>123</code> </td>
+        <td> <code>a1b2c3</code> </td>
+    </tr>
+    <tr>
+        <td> <code>abc<br>12345</code> </td>
+        <td> <code>a1b2c345</code> </td>
+    </tr>
+    <tr>
+        <td> <code>abcde<br>123</code> </td>
+        <td> <code>a1b2c3de</code> </td>
+    </tr>
+</table>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    std::string str1;
+    std::string str2;
+    std::string result;
+
+    <span class="hljs-comment">// WRITE YOUR SOLUTION HERE.</span>
+
+    std::cout &lt;&lt; result &lt;&lt; std::endl;
+}
+</code></pre>
+<hr>
+<h3 id="exercise-vector-push-back">Exercise: Vector Push Back</h3>
+<p>What is the behaviour of <code>std::vector::push_back</code> i.e.:</p>
+<ul>
+<li>Where in the vector does the element get pushed back?</li>
+<li>How does the size of the vector change?</li>
+</ul>
+<p>Write a program to investigate the above questions.</p>
+<hr>
+<h3 id="exercise-range-based-for-loops">Exercise: Range-Based For Loops</h3>
+<p>Range-based for loops have the following structure:</p>
+<pre><code class="language-cpp"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> element : container) { ... }
+</code></pre>
+<p>What is the difference in what the container returns between range-based for loops and indexing for loops?</p>
+<p>Write a program which uses a range-based for loop to loop through a vector and replaces each element with the sum of all previous elements.</p>
+<table>
+    <tr>
+        <th>Input</th>
+        <th>Output</th>
+    </tr>
+    <tr>
+        <td><code>{0, -1, 5, 3}</code></td>
+        <td><code>{0, -1, 4, 7}</code></td>
+    </tr>
+    <tr>
+        <td><code>{10, -10, 9, 9}</code></td>
+        <td><code>{10, 0, 9, 18}</code></td>
+    </tr>
+</table>
+<p>Do not define any more arrays or vectors.</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    std::vector&lt;<span class="hljs-type">int</span>&gt; vec{<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">3</span>};
+
+    <span class="hljs-comment">// WRITE YOUR SOLUTION HERE.</span>
+
+    <span class="hljs-comment">// To print the vector.</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> <span class="hljs-type">const</span>&amp; i : vec) {
+        std::cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;
+    }
+    std::cout &lt;&lt; std::endl;
+}
+</code></pre>
+<hr>
+<h3 id="enumerations">Enumerations</h3>
+<p>When should enumerations be used?</p>
+<p>What are the main differences between unscoped and scoped enums? Which one should be preferred?</p>
+<p>Consider a robot with multiple on-board devices. We want to be able to choose which ones to turn on and off so we resort to using bits to indicate if the device is on, <code>1</code>, or off, <code>0</code>. Convert the following program so that it uses <code>enum</code> instead of <code>const</code> variables.</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">constexpr</span> <span class="hljs-type">unsigned</span> proximity_sensors{<span class="hljs-number">0b1000</span>};
+<span class="hljs-keyword">constexpr</span> <span class="hljs-type">unsigned</span> lidar{<span class="hljs-number">0b0100</span>};
+<span class="hljs-keyword">constexpr</span> <span class="hljs-type">unsigned</span> motors{<span class="hljs-number">0b0010</span>};
+<span class="hljs-keyword">constexpr</span> <span class="hljs-type">unsigned</span> encoders{<span class="hljs-number">0b0011</span>};
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">turn_on_devices</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> devices)</span> </span>{
+    <span class="hljs-keyword">if</span> (devices &amp; proximity_sensors) {
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Turning on proximity sensors...&quot;</span> &lt;&lt; std::endl;
+    }
+    <span class="hljs-keyword">if</span> (devices &amp; lidar) {
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Turning on lidar...&quot;</span> &lt;&lt; std::endl;
+    }
+    <span class="hljs-keyword">if</span> (devices &amp; encoders) {
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Turning on encoders...&quot;</span> &lt;&lt; std::endl;
+    }
+    <span class="hljs-keyword">if</span> (devices &amp; motors) {
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Turning on motors...&quot;</span> &lt;&lt; std::endl;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    std::string devices{<span class="hljs-string">&quot;0000&quot;</span>};
+    std::cin &gt;&gt; devices;
+    <span class="hljs-built_in">turn_on_devices</span>(std::<span class="hljs-built_in">stoi</span>(devices, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>));
+}
+</code></pre>
+<p>What datatypes are enums only allowed to have?</p>
+<hr>
+<h3 id="pairs">Pairs</h3>
+<p><code>std::pair</code> can be used to represent containers that consists of any two datatypes e.g.</p>
+<pre><code class="language-cpp">std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>&gt; p1;
+std::pair&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;, std::pair&lt;<span class="hljs-type">double</span>, std::string&gt;&gt; p2;
+</code></pre>
+<p>What library is <code>std::pair</code> from?</p>
+<p>Define a representation for a device which has a name and an ID using <code>std::pair</code>. Write a short program to demonstrate how it should be initialised and printed.</p>
+<p>Define a representation for a 2D cartesian space using <code>std::pair</code>. Write a short program to demonstrate how it should be initialised and printed.</p>
+<p>What function can be used to create a <code>std::pair</code>? What advantages does this function have over the usual initialisation method?</p>
+<hr>
+<h3 id="tuples">Tuples</h3>
+<p><code>std::tuple</code> is a generalisation of <code>std::pair</code> and can be used to represent containers with 1 to n datatypes e.g.</p>
+<pre><code class="language-cpp">std::tuple&lt;<span class="hljs-type">int</span>&gt; t1;
+std::tuple&lt;<span class="hljs-type">int</span>, std::array&lt;<span class="hljs-type">int</span>, 3&gt;, std::string&gt; t3;
+</code></pre>
+<p>What library is <code>std::tuple</code> from?</p>
+<p>Define a representation for a 3D cartesian space using <code>std::tuple</code>. Write a short program to demonstrate how it should be initialised and printed.</p>
+<hr>
+<h3 id="challenge-vector-capacity">Challenge: Vector Capacity</h3>
+<p>Consider the program from <strong>Exercise: Vector Push Back</strong>.</p>
+<p>Analyse the behaviour of  the capacity of <code>std::vector</code>:</p>
+<ul>
+<li>What is the initial and final capacity of <code>vec</code>?</li>
+<li>How can the capacity of the vector be exceeded?</li>
+<li>What happens to <code>vec</code> if the capacity is exceeded? Consider the beginning and end address of <code>vec</code> before and after the capacity is exceeded.</li>
+<li>What strategies can be used to mitigate the capacity of <code>vec</code> being exceeded?</li>
+</ul>
+<hr>
+<h3 id="challenge-2d-lidar">Challenge: 2D LiDAR</h3>
+<p>Using the representation for the 2D cartesian space, write a program that extracts <em>points of interest</em> from cartesian points obtained from a LiDAR scan.</p>
+<ul>
+<li>The points from the LiDAR scan is given as:<pre><code>(0.00, 0.001), (-23.2, 23.4), (2.1, -0.43), (2.3, 42.32), (-2.1, -0.43), (2.3, 42.32), (-1.23, 1.32)
+</code></pre>
+</li>
+<li>Points of interest are points that are within 3 m of the LiDAR's position.</li>
+<li>Print out the points of interest with the format: <code>(x, y)\n</code>.</li>
+</ul>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// WRITE YOUR SOLUTION HERE.</span>
+}
+</code></pre>
+</details>
+<hr>
+<h2 id="memory">Memory</h2>
+<details>
+<summary><b>View tasks</b></summary>
+<h3 id="exercise-array-memory-layout">Exercise: Array Memory Layout</h3>
+<p>Show that the address of <code>std::array</code> is the same as the address of its first element.</p>
+<p>Show that the elements of <code>std::array</code> are contiguous.</p>
+<p>How are the elements of <code>std::array</code> allocated in memory?</p>
+<hr>
+<h3 id="exercise-vector-memory-layout">Exercise: Vector Memory Layout</h3>
+<p>What is the difference in use-cases between <code>std::array</code> and <code>std::vector</code>?</p>
+<p>Show that the address of <code>std::vector</code> is not the same as the address of its first element.</p>
+<p>Show that the elements of <code>std::vector</code> are contiguous.</p>
+<p>How are the elements of <code>std::vector</code> allocated in memory?</p>
+<p>How can one find more information about what methods <code>std::vector</code> has?</p>
+<hr>
+<h3 id="storage-duration">Storage Duration</h3>
+<p>There are three different types of storage duration in C++:</p>
+<ul>
+<li><em>Static</em>: Object persists throughout program life-time.</li>
+<li><em>Automatic</em>: Object persists within scope life-time.</li>
+<li><em>Dynamic</em>: Object life-time is defined by us.</li>
+</ul>
+<p>Provide examples of <em>static</em>, <em>automatic</em>, and <em>dynamic</em> variables.</p>
+<hr>
+<h3 id="exercise-dynamic-memory-allocation">Exercise: Dynamic Memory Allocation</h3>
+<p>Write a program which safely allocates then deallocates memory for a pointer to an <code>int</code> using <code>malloc</code> and <code>free</code> respectively. What are the disadvantages of using C-style dynamic memory allocation?</p>
+<p>Convert the program you created to use C++-style dynamic memory allocation i.e. <code>new</code> and <code>delete</code>.</p>
+<p>What are the dangers of using raw pointers? Provide examples.</p>
+<hr>
+<h3 id="exercise-smart-pointers">Exercise: Smart Pointers</h3>
+<p>How are smart pointers different from raw pointers? What raw pointer disadvantage does smart pointers address?</p>
+<p>What is the difference between unique and shared pointers? What raw pointer disadvantage does shared pointers address?</p>
+<p>Convert the following program so that raw pointers are replaced with smart pointers (prefer <code>std::unique_ptr</code> over <code>std::shared_ptr</code> when possible). The following program may or may not be correct.</p>
+<pre><code class="language-cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">int</span>* ptr1{<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>{<span class="hljs-number">1</span>}};
+    <span class="hljs-type">int</span>* ptr2{<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>{<span class="hljs-number">2</span>}};
+    <span class="hljs-type">int</span>* ptr3{ptr2};
+    <span class="hljs-type">int</span> var{<span class="hljs-number">5</span>};
+    <span class="hljs-type">int</span>* ptr4{<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>{var}};
+    <span class="hljs-type">int</span>* ptr5{<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>{var}};
+    <span class="hljs-keyword">delete</span> ptr1;
+    <span class="hljs-keyword">delete</span> ptr2;
+    <span class="hljs-keyword">delete</span> ptr3;
+    <span class="hljs-keyword">delete</span> ptr4;
+    <span class="hljs-keyword">delete</span> ptr5;
+}
+</code></pre>
+<p>When should smart pointers not be used?</p>
+<hr>
+<h3 id="exercise-making-smart-pointers">Exercise: Making Smart Pointers</h3>
+<p>What are some issues of using <code>new</code> to initialise a smart pointer?</p>
+<p>Convert the program from <strong>Exercise: Smart Pointers</strong> so that:</p>
+<ul>
+<li>raw pointers are replaced with smart pointers.</li>
+<li><code>new</code> is replaced with <code>std::make_unique</code> or <code>std::make_shared</code>.</li>
+</ul>
+<hr>
+<h3 id="exercise-passing-by-pointer">Exercise: Passing-By-Pointer</h3>
+<p>Convert the following program so that it uses smart pointers instead of raw pointers.</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(<span class="hljs-type">int</span>* ptr)</span> </span>{
+    <span class="hljs-keyword">return</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">int</span>* ptr{(<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>))};
+    *ptr = <span class="hljs-number">42</span>;
+    <span class="hljs-built_in">foo</span>(ptr);
+    <span class="hljs-built_in">free</span>(ptr);
+}
+</code></pre>
+<hr>
+<h3 id="exercise-references">Exercise: References</h3>
+<p>What are the differences between references and pointers?</p>
+<p>What is the output of the following program?</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">int</span> a{<span class="hljs-number">3</span>};
+    <span class="hljs-type">int</span>&amp; b{a};
+    std::cout &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; std::endl;
+    a = <span class="hljs-number">4</span>;
+    std::cout &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; std::endl;
+}
+</code></pre>
+<p>Are there any dangers to using references? Give an example.</p>
+<hr>
+<h3 id="exercise-passing-by-reference">Exercise: Passing-By-Reference</h3>
+<p>What is the output of the following program?</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; arg1, <span class="hljs-type">int</span> arg2)</span> </span>{
+    arg1++;
+    arg2++;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">int</span> a{<span class="hljs-number">3</span>};
+    <span class="hljs-type">int</span>&amp; b{a};
+    <span class="hljs-type">int</span> c{<span class="hljs-number">4</span>};
+    std::cout &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; c &lt;&lt; std::endl;
+    <span class="hljs-built_in">foo</span>(a, b);
+    std::cout &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; c &lt;&lt; std::endl;
+    <span class="hljs-built_in">foo</span>(c, a);
+    std::cout &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; c &lt;&lt; std::endl;
+}
+</code></pre>
+<hr>
+<h3 id="challenge-implement-a-shared-pointer">Challenge: Implement a Shared Pointer</h3>
+<p>Implement a shared pointer to an <code>int</code> in a class called <code>SharedPointer</code>. The specification for <code>SharedPointer</code> is given below:</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>SharedPointer()</code></td>
+        <td>A constructor which initialises a <code>nullptr</code>.</td>
+        <td><pre><code>SharedPointer sp;</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>SharedPointer(int*)</code></td>
+        <td>A constructor which initialises <code>*this</code> with <code>ptr</code>'s resource.</td>
+        <td><pre><code>int* ptr{new int{42}};
+SharedPointer sp(ptr);</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>~SharedPointer()</code></td>
+        <td>If <code>*this</code> is the last <code>SharedPointer</code> to the resource owned by <code>*this</code>, then the resource is destroyed.</td>
+        <td><pre><code>int* ptr{new int{42}};
+{
+    SharedPointer sp1(ptr);
+    SharedPointer sp2(ptr);
+    SharedPointer sp3(ptr);
+}
+*ptr; // Invalid access.</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>int* get()</code></td>
+        <td>Returns the stored pointer.</td>
+        <td><pre></code>
+int* ptr1{new int{42}};
+SharedPointer sp(ptr);
+int* ptr2{sp.get()};</pre></code></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>long use_count()</code></td>
+        <td>Returns the number of <code>SharedPointer</code> managing <code>*this</code>'s resource.</td>
+        <td><pre><code>int* ptr{new int{42}};
+SharedPointer sp1(ptr);
+SharedPointer sp2(ptr);
+SharedPointer sp3(ptr);
+sp1.use_count() == 3;</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>int& operator*()</code></td>
+        <td>Dereferences the stored pointer in <code>*this</code>.</td>
+        <td><pre><code>int* ptr{new int{42}};
+SharedPointer sp(ptr);
+*sp == 42;</code></pre></td>
+        <td>None</td>
+    </tr>
+</table>
+</details>
+<hr>
+<!-- ## Feedback
+
+If you liked or disliked anything about the labs, please leave some [feedback](TODO)! -->
+
+        
+        
+    </body>
+    </html>
