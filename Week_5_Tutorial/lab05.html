@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MTRN2500 - Lab05 &lpar;Exception Handling &amp; I&sol;O&rpar;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="mtrn2500---lab05-exception-handling--io">MTRN2500 - Lab05 (Exception Handling &amp; I/O)</h1>
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+<p>This week's lab exercises cover:</p>
+<ul>
+<li>Exception handling</li>
+<li>I/O:
+<ul>
+<li>File streams.</li>
+<li>String streams.</li>
+<li>I/O manipulation.</li>
+</ul>
+</li>
+</ul>
+<h2 id="exception-handling">Exception Handling</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="exercise-exception-handling">Exercise: Exception Handling</h3>
+<p>What are exceptions?</p>
+<p>Fill out the following table to discern when different exception types should be thrown.</p>
+<table>
+    <tr>
+        <th>Exception Type</th>
+        <th>When to throw</th>
+    </tr>
+    <tr>
+        <td><code>std::out_of_range</code></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>std::invalid_argument</code></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>std::runtime_error</code></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>std::logic_error</code></td>
+        <td></td>
+    </tr>
+</table>
+<h3 id="exercise-fix-the-exception">Exercise: Fix the Exception</h3>
+<p>The following program contains an <code>assign()</code> function which throws <code>std::runtime_error</code> if the user tries to assign <code>var</code> with an even <code>value</code>. This exception currently crashes the program. Modify the following program so that if the exception is thrown, <code>cleanup()</code> is applied on the faulty variable, and the program does not crash.</p>
+<p>Do not modify <code>assign()</code> and <code>cleanup()</code>.</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdexcept&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">assign</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; var, <span class="hljs-type">int</span> <span class="hljs-type">const</span>&amp; value)</span> </span>{
+    <span class="hljs-keyword">if</span> (value % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">throw</span> std::<span class="hljs-built_in">runtime_error</span>(<span class="hljs-string">&quot;Illegal assignment.&quot;</span>);
+    }
+    var = value;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">cleanup</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; var)</span> </span>{
+    var = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">int</span> a{<span class="hljs-number">0</span>};
+    <span class="hljs-type">int</span> b{<span class="hljs-number">0</span>};
+
+    <span class="hljs-comment">// MODIFY BELOW HERE.</span>
+    <span class="hljs-built_in">assign</span>(a, <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assign</span>(b, <span class="hljs-number">31</span>);
+}
+</code></pre>
+</details>
+<hr>
+<h2 id="io">I/O</h2>
+<details>
+<summary><b>View tasks</b></summary>
+<h3 id="exercise-junk-words">Exercise: Junk Words</h3>
+<p>Streams are an abstract mechanism to let you send and receive data to any device e.g. terminals or files.</p>
+<ul>
+<li>All types of streams contain these <a href="https://en.cppreference.com/w/cpp/io/basic_ios">methods</a>.</li>
+<li>All input streams (e.g. <code>std::ifstream</code>) will contain these <a href="https://en.cppreference.com/w/cpp/io/basic_istream">methods</a>.</li>
+<li>All output streams (e.g. <code>std::ofstream</code>) will contain these <a href="https://en.cppreference.com/w/cpp/io/basic_ostream">methods</a>.</li>
+<li>Some streams (e.g. <code>std::fstream</code>) will contain both input and output methods.</li>
+</ul>
+<p>What header file can you find <code>std::fstream</code>, <code>std::ifstream</code>, and <code>std::ofstream</code>?</p>
+<p>How would one open a file for reading, writing, and appending?</p>
+<p>Write a program which reads words line-by-line from <code>junk.txt</code> and outputs the words line-by-line in alphabetical order to both <code>valid.txt</code> and <code>std::cout</code> if the word exists in <code>lexicon.txt</code>.</p>
+<table>
+    <tr>
+        <th>Junk Words</th>
+        <th>Lexicon</th>
+        <th>Valid Words</th>
+    </tr>
+    <tr>
+        <td><pre><code>hello
+some
+junk
+world</pre></code></td>
+        <td><pre><code>hello
+world</pre></code></td>
+        <td><pre><code>hello
+world</pre></code></td>
+    </tr>
+    <tr>
+        <td><pre><code>order
+hello
+does
+not
+matter
+world
+junk</pre></code></td>
+        <td><pre><code>world
+hello</pre></code></td>
+        <td><pre><code>hello
+world</pre></code></td>
+    </tr>
+<tr>
+        <td><pre><code>words
+hello
+word
+world
+junk</pre></code></td>
+        <td><pre><code>world
+hello
+extra
+lexicon
+words</pre></code></td>
+        <td><pre><code>hello
+words
+world</pre></code></td>
+    </tr>
+</table>
+<hr>
+<h3 id="exercise-number-of-words">Exercise: Number of Words</h3>
+<p>What header file can you find <code>std::stringstream</code>?</p>
+<p>What are stringstreams? How are they different from streams?</p>
+<p>A word is any string that has no spaces in it. A sentence is any grouping of words that are separated by spaces. The first line of input from <code>std::cin</code> is a <code>sentence</code>. The second line of input from <code>std::cin</code> is a <code>word</code> where <code>word</code> denotes the string to be searched for in <code>sentence</code>. How many counts of <code>word</code> can be found in <code>sentence</code>?</p>
+<table>
+    <tr>
+        <th>Input</th>
+        <th>Output</th>
+    </tr>
+    <tr>
+        <td><pre><code>hello world hello goodbye everyone
+hello</pre></code></td>
+        <td><pre><code>2</pre></code></td>
+    </tr>
+    <tr>
+        <td><pre><code>hello world hello goodbye everyone
+world</pre></code></td>
+        <td><pre><code>1</pre></code></td>
+    </tr>
+    <tr>
+        <td><pre><code>hello world hello goodbye everyone
+hi</pre></code></td>
+        <td><pre><code>0</pre></code></td>
+    </tr>
+    <tr>
+        <td><pre><code>helloworldhellogoodbyeeveryone
+goodbye</pre></code></td>
+        <td><pre><code>0</pre></code></td>
+    </tr>
+</table>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">count_words</span><span class="hljs-params">(std::string <span class="hljs-type">const</span>&amp; sentence, std::string <span class="hljs-type">const</span>&amp; word)</span> </span>{
+    <span class="hljs-comment">// WRITE YOUR SOLUTION HERE.</span>
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    std::string sentence, word;
+    std::<span class="hljs-built_in">getline</span>(std::cin, sentence);
+    std::cin &gt;&gt; word;
+    std::cout &lt;&lt; <span class="hljs-built_in">count_words</span>(sentence, word) &lt;&lt; std::endl;
+}
+</code></pre>
+<hr>
+<h3 id="exercise-loading-bar">Exercise: Loading Bar</h3>
+<p>What header file can you find I/O manipulators?</p>
+<p>How are I/O manipulators applied?</p>
+<p>Write a program which outputs a loading bar to <code>std::cout</code> for an arbitrary number of loads given by <code>std::cin</code>. You may not use any string manipulaton. Your program must match the below example output.</p>
+<table>
+    <tr>
+        <th>Input</th>
+        <th>Output</th>
+    </tr>
+    <tr>
+        <td><code>5</code></td>
+        <td><pre><code>[     ]   0.00%
+[*    ]  20.00%
+[**   ]  40.00%
+[***  ]  60.00%
+[**** ]  80.00%
+[*****] 100.00%</code></pre></td>
+    </tr>
+    <tr>
+        <td><code>13</code></td>
+        <td><pre><code>[             ]   0.00%
+[*            ]   7.69%
+[**           ]  15.38%
+[***          ]  23.08%
+[****         ]  30.77%
+[*****        ]  38.46%
+[******       ]  46.15%
+[*******      ]  53.85%
+[********     ]  61.54%
+[*********    ]  69.23%
+[**********   ]  76.92%
+[***********  ]  84.62%
+[************ ]  92.31%
+[*************] 100.00%</code></pre></td>
+    </tr>
+</table>
+<hr>
+<h3 id="challenge-tee">Challenge: Tee</h3>
+<p>Write a class called <code>Tee</code> which is able to write an <code>std::string</code> to any number of streams simultaneously.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>Tee(std::ostream&)</code></td>
+        <td>A constructor which accepts a single output stream to write to.</td>
+        <td><pre><code>Tee t(std::cout);</pre></code></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Tee(std::vector&lt;std::reference_wrapper&lt;std::ostream&gt;&gt;)</code></td>
+        <td>A constructor which accepts any number of output stream to write to.</td>
+        <td><pre><code>std::ofstream f1("out1.txt");
+std::ofstream f2("out2.txt");
+Tee t({std::cout, f1, f2});</pre></code></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Tee& operator&lt;&lt;(Tee&, std::string const&)</code></td>
+        <td>Inserts the string contents to all of <code>*this</code>'s output streams.</td>
+        <td><pre><code>Tee t({std::cout, f1, f2});
+t << "Broadcasting to every stream" << std::endl;</pre></code></td>
+        <td>None.</td>
+    </tr>
+</table>
+<blockquote>
+<p><code>std::reference_wrapper</code> is not covered in this course so you may find this <a href="https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper">documentation</a> useful. Part of this challenge is to be able to independently research a C++ tool.</p>
+</blockquote>
+</details>
+<hr>
+
+        
+        
+    </body>
+    </html>
