@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MTRN2500 - Lab07 &lpar;Inheirtance &amp; Webots I&rpar;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="mtrn2500---lab07-inheirtance--webots-i">MTRN2500 - Lab07 (Inheirtance &amp; Webots I)</h1>
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+<p>This week's lab exercises cover:</p>
+<ul>
+<li>Inheritance:
+<ul>
+<li>Understand what the concept of inheritance is.</li>
+<li>Know terminology related to inheritance.</li>
+<li>Can model inheritance off real-world examples.</li>
+<li>Can apply inheritance in C++.</li>
+<li>Know the purpose of the access specifier in inheritance.</li>
+<li>Know the advantage of inheritance.</li>
+<li>Understand what the concept of association is.</li>
+<li>Can implement composition and aggregation.</li>
+</ul>
+</li>
+<li>Webots I:
+<ul>
+<li>Can navigate Webots documentation.</li>
+<li>Can use Webots documentation to independently discover and use devices.</li>
+<li>Can create a controller in Webots.</li>
+<li>Can use Webots' GCC build tool.</li>
+<li>Understands the purpose of <code>webots::Robot::step()</code> function.</li>
+<li>Can use velocity control for a motor.</li>
+<li>Can use blocking timers as a basic synchronisation technique.</li>
+<li>Understands how to use position motor control.
+<ul>
+<li>Can use the position sensor to set relative positions.</li>
+<li>Can apply the arc formula to calculate set positions.</li>
+</ul>
+</li>
+<li>Can structure and compile a multi-file Webots controller.</li>
+<li>Can use <code>webots::Keyboard</code> to velocity control a robot.</li>
+</ul>
+</li>
+</ul>
+<h2 id="inheritance">Inheritance</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="concept-of-inheritance">Concept of Inheritance</h3>
+<p>What is inheritance?</p>
+<p>What do we call a class that inherits another class? Likewise, what do we call a class that is inherited?</p>
+<p>What are some real-life examples of inheritance?</p>
+<table>
+    <tr>
+        <th>Base Class</th>
+        <th>Derived Class</th>
+    </tr>
+    <tr>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+    <tr>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+</table>
+<hr>
+<h3 id="exercise-simple-inheritance">Exercise: Simple Inheritance</h3>
+<p>What is the syntax for inheritance in C++? How would we use inheritance in the constructor?</p>
+<p>In what order is the derived class and base class constructors and destructors called? Write a program to demonstrate this.</p>
+<hr>
+<h3 id="inheriting-access-specifiers">Inheriting Access Specifiers</h3>
+<p>There are three types of inheritance with regards to access specifiers:</p>
+<pre><code class="language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base;     <span class="hljs-comment">// Public inheritance.</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">protected</span> Base;  <span class="hljs-comment">// Protected inheritance.</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">private</span> Base;    <span class="hljs-comment">// Private inheritance.</span>
+</code></pre>
+<p>This will change the access specifier of the base class in the derived class like so:</p>
+<table>
+    <tr>
+        <th>Inheritance</th>
+        <th>Base Class</th>
+        <th>Derived Class</th>
+    </tr>
+    <tr>
+        <td>Public</td>
+        <td><pre align="right"><code>public
+protected
+private</code></pre></td>
+        <td><pre ><code>→ public
+→ protected
+→ private</code></pre></td>
+    </tr>
+    <tr>
+        <td>Protected</td>
+        <td><pre align="right"><code>public
+protected
+private</code></pre></td>
+        <td><pre><code>→ protected
+→ protected
+→ private</code></pre></td>
+    </tr>
+    <tr>
+        <td>Private</td>
+        <td><pre align="right"><code>public
+protected
+private</code></pre></td>
+        <td><pre><code>→ private
+→ private
+→ private</code></pre></td>
+    </tr>
+</table>
+<hr>
+<h3 id="exercise-refactor-polygons">Exercise: Refactor Polygons</h3>
+<p>Fix the bug in <code>refactor-polygons.cpp</code> and refactor <code>Square</code> and <code>Triangle</code> to inherit a common class called <code>Polygon</code>.</p>
+<hr>
+<h3 id="exercise-association">Exercise: Association</h3>
+<p>Fill out the following table to outline the difference between <em>inheritance</em>, <em>aggregation</em>, and <em>composition</em>.</p>
+<table>
+    <tr>
+        <th>Relationship</th>
+        <th>Plain English (A/B)</th>
+        <th>Code Example</th>
+    </tr>
+    <tr>
+        <td>Inheritance</td>
+        <td>A is a B</td>
+        <td><pre><code>class Base;
+class Derived : public Base {
+    public:
+    Derived() : Base() {}
+};</code></pre></td>
+    </tr>
+    <tr>
+        <td>Aggregation</td>
+        <td>?</td>
+        <td><pre><code>?</code></pre></td>
+    </tr>
+    <tr>
+        <td>Composition</td>
+        <td>?</td>
+        <td><pre><code>?</code></pre></td>
+    </tr>
+</table>
+<p>Fill out the following table to state if the association is aggregation or composition. Provide an explanation.</p>
+<table>
+    <tr>
+        <th>Example</th>
+        <th>Association Type</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td>Organ and body</td>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+    <tr>
+        <td>Passenger and train</td>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+    <tr>
+        <td>Ticket venue and queue</td>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+    <tr>
+        <td>Employee and company</td>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+    <tr>
+        <td>Car and engine</td>
+        <td>?</td>
+        <td>?</td>
+    </tr>
+</table>
+<hr>
+<h3 id="exercise-composition">Exercise: Composition</h3>
+<p><em>This exercise has been set up in a lesson on EdStem so you can also complete it there and get more practice using the exam platform.</em></p>
+<p>Write a program which demonstrates the <code>Leaf</code> and <code>Tree</code> relationship. The following interface is provided.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>void Leaf::photosynthesise() const</code></td>
+        <td>Prints out "Photosynthesising..." when called.</td>
+        <td><pre><code>Leaf l;
+l.photosynthesise();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Tree::Tree(int numLeaves)</code></td>
+        <td>Creates a tree with the number of leaves.</td>
+        <td><pre><code>Tree t(10);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void Tree::photosynthesise() const</code></td>
+        <td>Makes each leaf photosynthesise once.</td>
+        <td><pre><code>Tree t(10);
+t.photosynthesise();</code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<hr>
+<h3 id="exercise-aggregation">Exercise: Aggregation</h3>
+<p><em>This exercise has been set up in a lesson on EdStem so you can also complete it there and get more practice using the exam platform.</em></p>
+<p>Write a program which demonstrates the <code>Passenger</code> and <code>Train</code> relationship. The following interface is provided.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>Passenger::Passenger(std::string const&)</code></td>
+        <td>Creates a passenger with a name.</td>
+        <td><pre><code>Passenger p("Peter");</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>friend operator==(Passenger const&, Passenger const&)</code></td>
+        <td>Compares two passengers who are equal if they have the same name. Otherwise, false.</td>
+        <td><pre><code>Passenger p1("Peter");
+Passenger p2("Peter");
+p1 == p2;  // True.</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>friend operator&lt;&lt;(std::ostream&, Passenger const&)</code></td>
+        <td>Writes the passengers name to output stream.</td>
+        <td><pre><code>Passenger p("Peter");
+std::cout << p;</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Train::Train()</code></td>
+        <td>Creates a train with no passengers.</td>
+        <td><pre><code>Train t;</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Train::Train(std::vector&lt;Passenger&gt; const&)</code></td>
+        <td>Creates a train with passengers.</td>
+        <td><pre><code>Passenger p1("Abe");
+Passenger p2("Mel");
+Train t({p1, p2});</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void Train::embark(std::vector&lt;Passenger&gt; const&)</code></td>
+        <td>Adds a passenger to the train. Do nothing if the passenger is already on the train.</td>
+        <td><pre><code>Passenger p("Mik");
+Train t;
+t.embark({p});</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void Train::disembark(std::vector&lt;Passenger&gt; const&)</code></td>
+        <td>Removes a passenger from the train. Do nothing if the passenger is not on the train.</td>
+        <td><pre><code>Passenger p("Lin");
+Train t;
+t.embark({p});
+t.disembark({p});</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>friend std::ostream& operator&lt;&lt;(std::ostream&, Train const&)</code></td>
+        <td>Print a list of passengers on the train.</td>
+        <td><pre><code>Passenger p1("Tom");
+Passenger p2("Wok");
+Train t({p1, p2});
+std::cout << t;</code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<hr>
+<h3 id="challenge-multiple-inheritance">Challenge: Multiple Inheritance</h3>
+<p><em>This exercise has been set up in a lesson on EdStem so you can also complete it there and get more practice using the exam platform.</em></p>
+<p>It is possible for a class to inherit multiple classes. Rectangles have have four right angles and four straight sides. Rhombuses have four straight equal-length sides. Squares are both rectangles and rhombuses.</p>
+<p>Implement <code>Square</code>, <code>Rectangle</code>, and <code>Rhombus</code>.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>Rectangle::Rectangle(int width, int height)</code></td>
+        <td>Creates a rectangle with width and height.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rectangle::getWidth() const</code></td>
+        <td>Gets the rectangle width.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rectangle::getHeight() const</code></td>
+        <td>Gets the rectangle height.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rectangle::area() const</code></td>
+        <td>Gets the rectangle area.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Rhombus::Rhombus(int slant, int width)</code></td>
+        <td>Creates a rhombus with a slant angle (degrees) and width.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rhombus::getSlant() const</code></td>
+        <td>Gets the rhombus slant.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rhombus::area() const</code></td>
+        <td>Gets the rhombus area.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>int Rhombus::getWidth() const</code></td>
+        <td>Gets the rhombus width.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Square::Square(int width)</code></td>
+        <td>Creates a square with width.</td>
+        <td><pre><code></code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<p>How can the following errors be resolved?</p>
+<pre><code>error: member 'area' found in multiple base classes of different types
+error: member 'getWidth' found in multiple base classes of different types
+</code></pre>
+<p>Is multiple inheritance appropriate for this <code>Square</code>, <code>Rectangle</code>, <code>Rhombus</code> relationship?</p>
+</details>
+<hr>
+<h2 id="webots-i">Webots I</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h2 id="prerequisites">Prerequisites</h2>
+<ol>
+<li>Install <a href="https://github.com/cyberbotics/webots/releases/tag/R2023a">Webots 2023a</a>.</li>
+</ol>
+<hr>
+<h2 id="exercise-hello-webots">Exercise: Hello Webots</h2>
+<p>Create a C++ controller called <code>hello_webots</code>.</p>
+<p>Write a simple &quot;Hello Webots!&quot; program that prints to the Webots console.</p>
+<p>Modify the <code>Makefile</code> so that it includes the following compilation flags:</p>
+<pre><code>CFLAGS = -std=c++14 -Wall -Werror
+</code></pre>
+<p>Compile the controller.</p>
+<p>Attach the controller to the robot.</p>
+<p>Run the controller.</p>
+<hr>
+<h2 id="exercise-navigating-documentation">Exercise: Navigating Documentation</h2>
+<p>An important skill of using Webots is being able to navigate their documentation at <a href="https://cyberbotics.com">https://cyberbotics.com</a>.</p>
+<img src="file:///e:\ALEX-WS\OneDrive - UNSW\000 University\Coursework\Sixth Year Engineering\Term 3\MTRN2500\Tutorials\Week 07\webots-website-documentation-dropdown.png" alt="webots-website-documentation-dropdown" width="800px">
+<p>Find the E-Puck robot documentation.</p>
+<p>Find the <code>Keyboard</code> class documentation.</p>
+<p>Find the <code>Motor</code> class documentation. Find the documentation for the <code>setVelocity()</code> method.</p>
+<p>Find the <code>Robot</code> class documentation. Find the documentation for the <code>step()</code> method.</p>
+<hr>
+<h2 id="exercise-simulated-controller">Exercise: Simulated Controller</h2>
+<p>What are some real-life examples of robot controllers/micro-controllers? Do these controllers run in discrete or continuous time?</p>
+<p>How does Webots simulate the instruction cycles of a controller? Create a controller, <code>simulated_controller</code>, which cycles every <code>256 ms</code> and prints an incrementing value.</p>
+<blockquote>
+<p>Don't forget to repeat the build process outlined in <a href="#exercise-hello-webots">Exercise: Hello Webots</a>.</p>
+</blockquote>
+<p>What happens to the controller if the <code>duration</code> is increased (<code>1000 ms</code>) or decreased (<code>64 ms</code>)?</p>
+<hr>
+<h2 id="exercise-velocity-motor-control">Exercise: Velocity Motor Control</h2>
+<p>Webots provides a class interface for controlling motors.</p>
+<p>There are two main types of motor control:</p>
+<ul>
+<li>Position control: Controls the angular rotation of the motor.</li>
+<li>Velocity control: Controls the angular velocity of the motor.</li>
+</ul>
+<p>Create a controller, <code>velocity_motor_control</code>, so that the robot:</p>
+<ul>
+<li>Moves forward at its maximum speed when the <code>moveForward()</code> function is called.</li>
+</ul>
+<blockquote>
+<p>A starter file has been provided for you.</p>
+</blockquote>
+<blockquote>
+<p>Don't forget to repeat the build process outlined in <a href="#exercise-hello-webots">Exercise: Hello Webots</a>.</p>
+</blockquote>
+<p>It is possible to control <em>when</em> to move. A basic synchronisation technique would be to use a blocking timer.</p>
+<pre><code class="language-cpp"><span class="hljs-keyword">while</span> (robot.<span class="hljs-built_in">step</span>(duration) != <span class="hljs-number">-1</span>) {  <span class="hljs-comment">// Loops forever until the controller exits.</span>
+    <span class="hljs-built_in">moveForward</span>(leftMotor, rightMotor);
+    <span class="hljs-built_in">wait</span>(robot, <span class="hljs-number">1000</span>);  <span class="hljs-comment">// Milliseconds.</span>
+    <span class="hljs-built_in">halt</span>(leftMotor, rightMotor);
+    <span class="hljs-built_in">wait</span>(robot, <span class="hljs-number">1000</span>);
+}
+</code></pre>
+<blockquote>
+<p>The <code>wait()</code> function has been implemented for you.</p>
+</blockquote>
+<p>Complete the <code>velocity_motor_control</code> controller so that the robot will loop through the following states:</p>
+<ul>
+<li>Moves forward at its maximum speed for <code>1 s</code>.</li>
+<li>Moves backwards at half the robot's maximum speed for <code>2 s</code>.</li>
+<li>Turns left on the spot at half the robot's maximum speed four times for <code>1 s</code>.</li>
+</ul>
+<hr>
+<h2 id="revision-arc-formula">Revision: Arc Formula</h2>
+<p>The arc formula is <code>s = r * theta</code>.</p>
+<p>For a two-wheeled robot (i.e. the E-Puck), how much should each wheel spin (in radians) for the robot to travel a distance of <code>1 m</code>?</p>
+<hr>
+<h2 id="exercise-position-motor-control">Exercise: Position Motor Control</h2>
+<p>Create a controller, <code>position_motor_control</code>, so that the robot:</p>
+<ul>
+<li>Moves forward for <code>0.5 m</code>.</li>
+</ul>
+<p>It is important to note that <code>webots::Motor::setPosition()</code> is a non-blocking function i.e. it will execute and return immediately while the motion can still happen.</p>
+<p>The angular position given to <code>webots::Motor::setPosition()</code> represents the absolute angular position relative to the initial position when the controller was instantiated. To set a relative angular position from the current position of the motor, a <a href="https://cyberbotics.com/doc/reference/positionsensor?tab-language=c++">position sensor</a> is required.</p>
+<p>Complete the <code>position_motor_control</code> so that the robot will loop through the following states:</p>
+<ul>
+<li>Moves forward for <code>0.5 m</code>.</li>
+<li>Moves Backwards for <code>0.5 m</code>.</li>
+<li>Turns right on the spot for <code>90 deg</code>.</li>
+</ul>
+<hr>
+<h2 id="multi-file-webots-controllers">Multi-File Webots Controllers</h2>
+<p>It is likely that your Webots controllers will require multiple <code>.cpp</code> and <code>.hpp</code> files. A controller may even be dependent on another controller's files. Consider the following Webots controllers folder structure:</p>
+<pre><code>controllers/
+|
+|_ velocity_motor_control/
+|  |_ include/
+|  |  |_ velocity_functions.hpp
+|  |
+|  |_ src/
+|  |  |_ velocity_functions.cpp
+|  |
+|  |_ Makefile
+|  |_ velocity_motor_control.cpp
+|
+|_ keyboard_control/
+   |_ keyboard_control.cpp
+   |_ Makefile
+</code></pre>
+<p>To compile <code>velocity_functions.cpp</code>, the <code>velocity_motor_control/Makefile</code> would need to be modified:</p>
+<pre><code class="language-make">CXX_SOURCES = velocity_motor_control.cpp src/velocity_functions.cpp
+INCLUDE = -I<span class="hljs-string">&quot;/include&quot;</span>
+</code></pre>
+<p>If another controller e.g. <code>keyboard_control</code> is dependent on <code>velocity_functions.cpp</code>, then <code>keyboard_control/Makefile</code> would also need to be modified:</p>
+<pre><code class="language-make">CXX_SOURCES = keyboard_control.cpp ../velocity_motor_control/src/velocity_functions.cpp
+INCLUDE = -I<span class="hljs-string">&quot;../velocity_motor_control/include&quot;</span>
+</code></pre>
+<hr>
+<h2 id="exercise-keyboard-control">Exercise: Keyboard Control</h2>
+<p>A common functionality of robots is its ability to be teleoperated i.e. remote controlled. Webots has a class called <code>webots::Keyboard</code> which allows this functionality.</p>
+<p>Create a controller, <code>keyboard_control</code>, which uses the keyboard to move the robot (by velocity control) with the following commands:</p>
+<ul>
+<li><code>'w'</code>: Moves the robot forward.</li>
+<li><code>'a'</code>: Turns the robot left.</li>
+<li><code>'s'</code>: Moves the robot backward.</li>
+<li><code>'d'</code>: Turns the robot right.</li>
+<li><code>' '</code>: Stops the robot.</li>
+</ul>
+<p>Print to <code>std::cout</code> what key has been pressed.</p>
+<blockquote>
+<p>Repeat the documentation research process from <a href="#exercise-velocity-motor-control">Exercise: Velocity Motor Control</a> and <a href="#exercise-position-motor-control">Exercise: Position Motor Control</a> for <code>webots::Keyboard</code>.</p>
+</blockquote>
+<hr>
+<h2 id="challenge-non-blocking-timer">Challenge: Non-Blocking Timer</h2>
+<p>The timer presented in <a href="#exercise-velocity-motor-control">Exercise: Velocity Motor Control</a> has the issue of blocking the controller from executing any actions while the timer is running. This is inefficient.</p>
+<p>Implement a non-blocking timer using the provided table specification. Write a new control loop that demonstrates the usage of <code>Timer</code>.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>Timer(webots::Robot const& robot)</code></td>
+        <td>Constructor which takes a <code>robot</code> to get access to <code>webots::Robot::getTime()</code>. </td>
+        <td><pre><code>webots::Robot r;
+Timer t(r);</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>void time(double const duration)</code></td>
+        <td>Starts the timer at the current timestep, <code>start</code>, of <code>robot</code>. Both <code>start</code> and <code>duration</code> (in milliseconds) is saved in <code>*this</code>.</td>
+        <td><pre><code>webots::Robot r;
+Timer t(r);
+t.time(10);</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>bool expired() const</code></td>
+        <td>Returns true if the current timestep of <code>robot</code> is greater than <code>start + duration</code>. Otherwise, false.</td>
+        <td><pre><code>webots::Robot r;
+Timer t(r);
+t.time(10);
+if (t.expired());</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>void wait(double const duration)</code></td>
+        <td>A blocking timer which uses <code>time()</code> and <code>expired()</code>.</td>
+        <td><pre><code>webots::Robot r;
+Timer t(r);
+t.wait(10);</code></pre></td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td><code>friend std::ostream& operator&lt;&lt;(std::ostream& os, Timer const& timer)</code></td>
+        <td>Writes to <code>os</code> the <code>start</code> and <code>duration</code>.</td>
+        <td><pre><code>webots::Robot r;
+Timer t(r);
+t.time(10);
+std::cout &lt;&lt; os;</code></pre></td>
+        <td>None</td>
+    </tr>
+</table>
+</details>
+<hr>
+
+        
+        
+    </body>
+    </html>
