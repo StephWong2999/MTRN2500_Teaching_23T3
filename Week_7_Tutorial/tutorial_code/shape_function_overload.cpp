@@ -13,17 +13,17 @@ private:
 };
 
 // Derived Class - Circle. 
-// How can the getColor function be overloaded
+// How can the getColor function be override
 class Circle : public Shape {
 public:
     Circle(double radius = 2.0) 
         : mRadius{radius} {};
     double getRadius() const {return mRadius;};
     void setRadius(double radius) {mRadius = radius;};
-    // Overloaded Function - The getColor function is overloaded from Base Class
-    //std::string getColor() const {return mColor;};
+    // Overloaded Function - The getColor function is overridden from Base Class
+    std::string getColor() const {return mColor;};
 private:
-    //std::string mColor{"green"};
+    std::string mColor{"green"};
     double mRadius{};
 };
 
@@ -38,8 +38,8 @@ int main() {
     std::cout << "The colour of circle is: " << circle.getColor() << std::endl;
     // The colour of the circle is: orange\n”
 
-    // Run Overloaded Operator
-    //std::cout << "The colour of circle is: " << circle.Shape::getColor() << std::endl;
+    // Run Overridden Operator
+    std::cout << "The colour of circle is: " << circle.Shape::getColor() << std::endl;
 
 
     return 0;

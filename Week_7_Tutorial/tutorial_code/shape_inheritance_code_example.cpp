@@ -22,6 +22,21 @@ private:
     double mRadius{};
 };
 
+// Derived Class - Rectangle 
+class Rectangle : public Shape {
+public:
+    Rectangle(const std::string& color = "blue", double length = 2.0, double width = 3.0) 
+        : Shape{color}, mWidth{width}, mLength{length} {};
+    double getWidth() const {return mWidth;};
+    void setWidth(double Width) {mWidth = Width;};
+    double getLength() const {return mLength;};
+    void setLength(double length) {mLength = length;};
+private:
+    double mWidth{};
+    double mLength{};
+};
+
+
 /*
 TODO:
 1. Implement Derived Class - Rectangle
@@ -39,6 +54,16 @@ int main() {
     Circle circle{};
     std::cout << "The colour of circle is: " << circle.getColor() << std::endl;
     // The colour of the circle is: orange\n”
+    circle.setColor("blue");
+    std::cout << "The colour of circle is: " << circle.getColor() << std::endl;
+
+
+
+    //Rectangle rectangle{};
+    //std::cout << "The colour of rectangle is: " << rectangle.getColor() << std::endl;
+    // Constructing -> Base -> Derived
+    // Destructing -> Derived -> Based
+
 
     return 0;
 }
