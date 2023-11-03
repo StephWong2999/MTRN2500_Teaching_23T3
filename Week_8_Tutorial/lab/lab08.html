@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MTRN2500 - Lab08 &lpar;Polymorphism&rpar;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="mtrn2500---lab08-polymorphism">MTRN2500 - Lab08 (Polymorphism)</h1>
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+<p>This week's lab exercises cover:</p>
+<ul>
+<li>Concept of polymorphism.</li>
+<li>Can use dynamic cast to typecast pointers/references to objects up the inheritance hierarchy.</li>
+<li>Understand the purpose of virtual functions.</li>
+<li>Understand what pure virtual functions are and how they enforce abstract classes.</li>
+<li>Understand the purpose of virtual destructors.</li>
+</ul>
+<h2 id="polymorphism">Polymorphism</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="exercise-encapsulating-controllers">Exercise: Encapsulating Controllers</h3>
+<p>Create a controller, <code>base_robot</code>, with a class, <code>BaseRobot</code>, which encapsulates the functions and Webots devices from <code>keyboard_control</code> and <code>velocity_motor_control</code> from <code>lab07</code>.</p>
+<p><em>Please note: BaseRobot here is different from that described in your assignment spec and should not be confused with this.</em></p>
+<p><code>BaseRobot</code> should compose:</p>
+<ul>
+<li>A robot controller of type <code>webots::Robot</code>.</li>
+<li>The left wheel motor of type <code>webots::Motor&amp;</code>.</li>
+<li>The right wheel motor of type <code>webots::Motor&amp;</code>.</li>
+<li>A keyboard of type <code>webots::Keyboard&amp;</code>.</li>
+</ul>
+<p>The public interface for <code>BaseRobot</code> should have the following methods:</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>BaseRobot(int)</code></td>
+        <td>Creates a robot controller with a specified cycle duration.</td>
+        <td><pre><code>BaseRobot r(64);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>run()</code></td>
+        <td>Executes the robot's control loop. The default robot behaviour of the control loop is to accept teleoperation commands to move the robot.</td>
+        <td><pre><code>BaseRobot r(64);
+r.run();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void halt()</code></td>
+        <td>Stops robot movement.</td>
+        <td><pre><code>BaseRobot r(64);
+r.halt();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void moveForward()</code></td>
+        <td>Moves the robot forward at the robot's maximum speed.</td>
+        <td><pre><code>BaseRobot r(64);
+r.moveForward();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void moveBackward()</code></td>
+        <td>Moves the robot backward at the robot's maximum speed.</td>
+        <td><pre><code>BaseRobot r(64);
+r.moveBackward();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void turnLeft()</code></td>
+        <td>Turns the robot left on the spot at half the robot's maximum speed.</td>
+        <td><pre><code>BaseRobot r(64);
+r.turnLeft();</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>void turnRight()</code></td>
+        <td>Turns the robot right on the spot at half the robot's maximum speed.</td>
+        <td><pre><code>BaseRobot r(64);
+r.turnRight();</code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<p>Create a controller, <code>autonomous_robot</code>, with a class, <code>AutonomousRobot</code>, which inherits <code>BaseRobot</code>.</p>
+<p>The public interface for <code>BaseRobot</code> should only have the following methods:</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>AutonomousRobot(int)</code></td>
+        <td>Creates a robot controller with a specified cycle duration.</td>
+        <td><pre><code>AutonomousRobot r(64);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>run()</code></td>
+        <td>Executes the robot's control loop. The robot behaviour is to move forward for <code>1 s</code>, move backward for <code>1 s</code>, turn left for <code>0.5 s</code>, and repeat.</td>
+        <td><pre><code>AutonomousRobot r(64);
+r.run();</code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<hr>
+<h3 id="concept-of-polymorphism">Concept of Polymorphism</h3>
+<p>Define polymorphism.</p>
+<p>What are some real-life examples of polymorphism?</p>
+<p>What is an example of polymorphism that has already been covered in this course?</p>
+<hr>
+<h3 id="exercise-dynamic-casting">Exercise: Dynamic Casting</h3>
+<p>How does <code>dynamic_cast</code> differ from <code>static_cast</code>?</p>
+<p>Consider the following classes.</p>
+<pre><code class="language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Base</span> {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>{ std::cout &lt;&lt; <span class="hljs-string">&quot;Base.&quot;</span> &lt;&lt; std::endl; }
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>{ std::cout &lt;&lt; <span class="hljs-string">&quot;Derived.&quot;</span> &lt;&lt; std::endl; }
+};
+</code></pre>
+<p>Demonstrate up-casting (i.e. from <code>Derived*</code> to <code>Base*</code>). What is the expected output of <code>foo()</code> on the casted object?</p>
+<p>Demonstrate up-casting with <code>BaseRobot</code> and <code>AutonomousRobot</code>. What is the expected control loop behaviour?</p>
+<hr>
+<h3 id="exercise-virtual-functions">Exercise: Virtual Functions</h3>
+<p>What are virtual functions?</p>
+<p>What is the syntax for marking and overriding a virtual function?</p>
+<p>Modify <code>Derived</code> and <code>Base</code> such that <code>foo()</code> is appropriately marked <code>virtual</code> and <code>override</code>. What is the expected output of <code>foo()</code> on the casted object?</p>
+<p>Modify <code>AutonomousRobot</code> and <code>BaseRobot</code> such that <code>run()</code> is appropriately marked <code>virtual</code> and <code>override</code>. What is the expected control loop behaviour on the up-casted object?</p>
+<hr>
+<h3 id="exercise-pure-virtual-functions">Exercise: Pure Virtual Functions</h3>
+<p>What is the syntax for declaring a pure virtual function?</p>
+<p>How are virtual functions different from pure virtual functions?</p>
+<p>What is an abstract class?</p>
+<p>Consider the classes <code>Base</code> and <code>Derived</code> from <a href="#exercise-virtual-functions">Exercise: Virtual Functions</a>. Make <code>Base</code> an abstract class and demonstrate that:</p>
+<ul>
+<li><code>Base</code> cannot be instantiated.</li>
+<li><code>Derived</code> cannot be instantiated without implementing the pure virtual function.</li>
+</ul>
+<p>Modify <code>BaseRobot</code> such that it is an abstract class. What is an appropriate function to make pure virtual?</p>
+<hr>
+<h3 id="exercise-virtual-destructor">Exercise: Virtual Destructor</h3>
+<p>Consider the following program which shows the order of construction and destruction via an up-casted pointer:</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Base</span> {
+    <span class="hljs-built_in">Base</span>() { std::cout &lt;&lt; <span class="hljs-string">&quot;Creating Base.&quot;</span> &lt;&lt; std::endl; }
+    ~<span class="hljs-built_in">Base</span>() { std::cout &lt;&lt; <span class="hljs-string">&quot;Destroying Base.&quot;</span> &lt;&lt; std::endl; }
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base {
+    <span class="hljs-built_in">Derived</span>() { std::cout &lt;&lt; <span class="hljs-string">&quot;Creating Derived.&quot;</span> &lt;&lt; std::endl; }
+    ~<span class="hljs-built_in">Derived</span>() { std::cout &lt;&lt; <span class="hljs-string">&quot;Destroying Derived.&quot;</span> &lt;&lt; std::endl; }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    Base* b = <span class="hljs-keyword">new</span> Derived;  <span class="hljs-comment">// Up-cast.</span>
+    <span class="hljs-keyword">delete</span> b;
+}
+</code></pre>
+<p>What is the output of the program?</p>
+<p>Modify the program so that <code>Base::~Base()</code> is marked <code>virtual</code>. What is the output of the program?</p>
+</details>
+<hr>
+
+        
+        
+    </body>
+    </html>
