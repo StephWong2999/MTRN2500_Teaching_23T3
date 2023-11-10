@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>MTRN2500 - Lab09 &lpar;Templates&rpar;</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="mtrn2500---lab09-templates">MTRN2500 - Lab09 (Templates)</h1>
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+<p>This week's lab exercises cover:</p>
+<ul>
+<li>Understand the concept of generic programming and how C++ achieves this.</li>
+<li>Can write function templates.</li>
+<li>Can write class templates.</li>
+<li>Know that the STL library uses templates.</li>
+<li>Can write a function template in the same style as STL algorithms.</li>
+</ul>
+<h2 id="templates">Templates</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="concept-of-templates">Concept of Templates</h3>
+<p>What is generic programming? How does C++ achieve this programming paradigm?</p>
+<p>What is an example of templates that has already been covered in this course?</p>
+<p>How are templates compiled?</p>
+<hr>
+<h3 id="exercise-function-templates">Exercise: Function Templates</h3>
+<p>Convert the following program such that it uses a function template instead of function overloads:</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-type">double</span> var)</span> </span>{ std::cout &lt;&lt; var &lt;&lt; std::endl; }
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-type">int</span> var)</span> </span>{ std::cout &lt;&lt; var &lt;&lt; std::endl; }
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">(std::string var)</span> </span>{ std::cout &lt;&lt; var &lt;&lt; std::endl; }
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-type">char</span> var)</span> </span>{ std::cout &lt;&lt; var &lt;&lt; std::endl; }
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">print</span>(<span class="hljs-number">3.23</span>);
+    <span class="hljs-built_in">print</span>(<span class="hljs-number">3</span>);
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;t3af4&quot;</span>);
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;!&#x27;</span>);
+}
+</code></pre>
+<hr>
+<h3 id="exercise-class-templates">Exercise: Class Templates</h3>
+<p>Recall <em>Exercise: Complex Numbers</em> from <code>lab02-1</code>. Modify <code>Complex</code> such that it is templated. It should be able to store complex numbers of any numeric type (<code>int</code>, <code>float</code>, <code>double</code>, etc.). You can assume your code would not be run with non-numeric types.</p>
+<blockquote>
+<p><code>complex.hpp</code> has been provided as a starter.</p>
+</blockquote>
+<p>You can use the following code as test cases you may want to use to assess your code.</p>
+<pre><code class="language-cpp"><span class="hljs-comment">// test case: Default constructor</span>
+{
+    mtrn2500::Complex&lt;<span class="hljs-type">double</span>&gt; actual;
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">argument</span>() == <span class="hljs-number">0.0</span>); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">modulus</span>() == <span class="hljs-number">0.0</span>);  <span class="hljs-comment">// Assume equality of floating point numbers</span>
+}
+
+<span class="hljs-comment">// test case: Real constructor</span>
+{
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">actual</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span></span>;
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">argument</span>() == <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">modulus</span>() == <span class="hljs-number">2</span>);
+}
+
+<span class="hljs-comment">// test case: Real and imaginary constructor</span>
+{
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">actual</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span></span>;
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">argument</span>() == <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">modulus</span>() == <span class="hljs-number">5</span>);
+}
+
+<span class="hljs-comment">// test case: Conjugate Double</span>
+{
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">actual</span><span class="hljs-params">(<span class="hljs-number">3.3</span>, <span class="hljs-number">4.4</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">double</span>&gt; <span class="hljs-title">expected</span><span class="hljs-params">(<span class="hljs-number">3.3</span>, <span class="hljs-number">-4.4</span>)</span></span>;
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">conjugate</span>() == expected); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+}
+
+<span class="hljs-comment">// test case: Conjugate Integer</span>
+{
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">actual</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Complex&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">expected</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">-4</span>)</span></span>;
+    <span class="hljs-built_in">assert</span>(actual.<span class="hljs-built_in">conjugate</span>() == expected);
+}
+</code></pre>
+<hr>
+<h3 id="exercise-pair">Exercise: Pair</h3>
+<p><code>std::pair</code> is limited in functionality (e.g. there is no <code>operator&lt;&lt;</code> and no pair conversions). We want to implement our own <code>Pair</code> template class according to the following interface.</p>
+<table>
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Usage</th>
+        <th>Exceptions</th>
+    </tr>
+    <tr>
+        <td><code>Pair()</code></td>
+        <td>Default constructor which default initialises <code>first</code> and <code>second</code>.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p;</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair(U first, V second)</code></td>
+        <td>Default constructor which initialises <code>first</code> and <code>second</code> with the provided arguments.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p(42, "42");</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair(Pair const& other)</code></td>
+        <td>Copy constructor.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p1(42, "42");
+Pair&lt;int, std::string&gt; p2(p1);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair(Pair&& other)</code></td>
+        <td>Move constructor.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p1(42, "42");
+Pair&lt;int, std::string&gt; p2(std::move(p1));</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair& operator=(Pair const& other)</code></td>
+        <td>Copy assignment.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p1(42, "42");
+Pair&lt;int, std::string&gt; p2;
+p2 = p1;</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair& operator=(Pair&& other)</code></td>
+        <td>Move assignment.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p1(42, "42");
+Pair&lt;int, std::string&gt; p2;
+p2 = std::move(p1);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>operator Pair&lt;X, Y&gt;()</code></td>
+        <td>Implicitly converts <code>first</code> and <code>second</code> from <code>&lt;U, V&gt;</code> to <code>&lt;X, Y&gt;</code>. This function returns an object of type <code>Pair&lt;X, Y&gt;</code>.</td>
+        <td><pre><code>Pair&lt;int, int&gt; p1(42, 32);
+Pair&lt;float, float&gt; p2(p1);</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>friend std::ostream& operator&lt;&lt;(std::ostream& os, Pair const& p)</code></td>
+        <td>Writes <code>first</code> and <code>second</code> to output stream with the format <code>(first, second)</code>.</td>
+        <td><pre><code>Pair&lt;int, std::string&gt; p(42, "42");
+std::cout &lt;&lt; p;</code></pre></td>
+        <td>None.</td>
+    </tr>
+    <tr>
+        <td><code>Pair&lt;X, Y&gt; make_pair(X x, Y y)</code></td>
+        <td>Free function which constructs a <code>Pair&lt;X, Y&gt;</code> of <code>x</code> and <code>y</code>.</td>
+        <td><pre><code>auto p{make_pair(42, "42")};</code></pre></td>
+        <td>None.</td>
+    </tr>
+</table>
+<p>Use the following to test your code:</p>
+<pre><code class="language-cpp"><span class="hljs-comment">// Test case: Default constructor int, char</span>
+{
+    mtrn2500::Pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">char</span>&gt; p;
+    <span class="hljs-built_in">assert</span>(p.first == <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">assert</span>(p.second == <span class="hljs-string">&#x27;\0&#x27;</span>);
+}
+
+<span class="hljs-comment">// Test case: Default constructor str, float</span>
+{
+    mtrn2500::Pair&lt;std::string, <span class="hljs-type">float</span>&gt; p;
+    <span class="hljs-built_in">assert</span>(p.first == <span class="hljs-string">&quot;&quot;</span>);
+    <span class="hljs-built_in">assert</span>(p.second == <span class="hljs-number">0.0</span>); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+}
+
+<span class="hljs-comment">// Test case: Value constructor int, str</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    <span class="hljs-built_in">assert</span>(p.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Value constructor float, vec</span>
+{
+    mtrn2500::Pair&lt;<span class="hljs-type">float</span>, std::vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">p</span>(<span class="hljs-number">42.42</span>, {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>});
+    <span class="hljs-built_in">assert</span>(p.first == <span class="hljs-number">42.42</span>); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+    <span class="hljs-built_in">assert</span>(p.second == std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}));
+}
+
+<span class="hljs-comment">// Test case: Copy constructor</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p2</span><span class="hljs-params">(p1)</span></span>;
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Move constructor</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p2</span><span class="hljs-params">(std::move(p1))</span></span>;
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Copy assignment</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; p2;
+    p2 = p1;
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Move assignment</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; p2;
+    p2 = std::<span class="hljs-built_in">move</span>(p1);
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Pair conversion int -&gt; float</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-number">32</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">float</span>, <span class="hljs-type">float</span>&gt; <span class="hljs-title">p2</span><span class="hljs-params">(p1)</span></span>;
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">42</span>); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-number">32</span>); <span class="hljs-comment">// Assume equality of floating point numbers</span>
+}
+
+<span class="hljs-comment">// Test case: Pair conversion bool -&gt; int</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">bool</span>, <span class="hljs-type">bool</span>&gt; <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>)</span></span>;
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; <span class="hljs-title">p2</span><span class="hljs-params">(p1)</span></span>;
+    <span class="hljs-built_in">assert</span>(p2.first == <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">assert</span>(p2.second == <span class="hljs-number">1</span>);
+}
+
+<span class="hljs-comment">// Test case: Output stream</span>
+{
+    <span class="hljs-function">mtrn2500::Pair&lt;<span class="hljs-type">int</span>, std::string&gt; <span class="hljs-title">p</span><span class="hljs-params">(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)</span></span>;
+    std::stringstream ss;
+    ss &lt;&lt; p;
+    <span class="hljs-built_in">assert</span>(ss.<span class="hljs-built_in">str</span>() == <span class="hljs-string">&quot;(42, 42)&quot;</span>);
+}
+
+<span class="hljs-comment">// Test case: Make pair</span>
+{
+    <span class="hljs-keyword">auto</span> p{mtrn2500::Pair::<span class="hljs-built_in">make_pair</span>(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>)};
+    <span class="hljs-built_in">assert</span>(p.first == <span class="hljs-number">42</span>);
+    <span class="hljs-built_in">assert</span>(p.second == <span class="hljs-string">&quot;42&quot;</span>);
+}
+</code></pre>
+<!-- 
+---
+
+### Revision: STL Algorithm Predicates & Operations
+
+A lot of STL algorithms will have a function overload for accepting a **predicate**, **operation**, or **function** function:
+- Predicates are true/false expressions.
+- Operations modify the given inputs.
+
+These functions can have one or two inputs:
+- Single inputs work on one element at a time within a range.
+- Two inputs work on two consecutive elements at a time within a range.
+
+<table>
+    <tr>
+        <th>Return Type</th>
+        <th>Single Input</th>
+        <th>Two Inputs</th>
+    </tr>
+    <tr>
+        <td>Boolean</td>
+        <td>UnaryPredicate</td>
+        <td>BinaryPredicate</td>
+    </tr>
+    <tr>
+        <td>Element</td>
+        <td>UnaryOperation</td>
+        <td>BinaryOperation</td>
+    </tr>
+    <tr>
+        <td>Void</td>
+        <td>UnaryFunction</td>
+        <td>BinaryFunction</td>
+    </tr>
+</table>
+
+For example, look at the signature and implementation of the following STL algorithms:
+- [`std::for_each`](https://en.cppreference.com/w/cpp/algorithm/for_each) has a `UnaryFunction` overload.
+- [`std::transform`](https://en.cppreference.com/w/cpp/algorithm/transform) has a `UnaryOperation` and `BinaryOperation` overload.
+- [`std::find_if`](https://en.cppreference.com/w/cpp/algorithm/find) has a `UnaryPredicate` overload.
+
+
+---
+
+### Exercise: `transform_if`
+
+Write a templated function, `transform_if`, which applies the given function, `unary_op`, to the range of iterators `[first, last)` and stores the result of `unary_op` at the output range starting at `d_first`.
+
+The function `unary_op` conditionally executes on the current iterator based on the given predicate function, `unary_pred`, if it is `true`; otherwise, the current iterator is skipped if `unary_pred` is `false`.
+
+`transform_if` returns the end iterator of the output range.
+
+The function declaration is as follows:
+```cpp
+OutputIt transform_if(InputIt first, InputIt last, OutputIt d_first, UnaryPred unary_pred, UnaryOp unary_op);
+```
+
+> `std::transform` and its possible implementation can be referred to here: https://en.cppreference.com/w/cpp/algorithm/transform.
+
+> `test_transform_if.cpp` has been provided. Refer to the tests to see how `transform_if` is used. -->
+<hr>
+<h3 id="extension-challenge-invert-element-order">Extension Challenge: Invert Element Order</h3>
+<p>Write a function which inverts the element ordering of a container (in-place) based on the existence of elements in the container and no matter where the element appears in the container. That is, the smallest element is swapped with the biggest element, the second-smallest element is swapped with the second-biggest element, and so on.</p>
+<table>
+    <tr>
+        <th>Input</th>
+        <th>Output</th>
+    </tr>
+    <tr>
+        <td>1, 2, 4, 3</td>
+        <td>4, 3, 1, 2</td>
+    </tr>
+    <tr>
+        <td>1, 1, 1, 0</td>
+        <td>0, 0, 0, 1</td>
+    </tr>
+    <tr>
+        <td>a, c, bac</td>
+        <td>c, a, bac</td>
+    </tr>
+    <tr>
+        <td>2, 2, 2</td>
+        <td>2, 2, 2</td>
+    </tr>
+</table>
+<pre><code class="language-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Iter, <span class="hljs-keyword">typename</span> T = <span class="hljs-keyword">typename</span> std::iterator_traits&lt;Iter&gt;::value_type&gt;
+<span class="hljs-keyword">auto</span> <span class="hljs-built_in">invert_element_order</span>(Iter first, Iter last) -&gt; <span class="hljs-type">void</span> {
+    <span class="hljs-comment">// WRITE YOUR SOLUTION HERE.</span>
+}
+</code></pre>
+<blockquote>
+<p><code>T</code> is given a default type i.e. <code>std::iterator_traits&lt;Iter&gt;::value_type</code> which is the underlying datatype pointed to by <code>Iter</code>. The concept of type traits is not covered in this course.</p>
+</blockquote>
+<p>Use the following code to test your solution.</p>
+<pre><code class="language-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+std::ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream&amp; os, std::vector&lt;T&gt; <span class="hljs-type">const</span>&amp; cont) {
+    os &lt;&lt; <span class="hljs-string">&quot;[&quot;</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> <span class="hljs-type">const</span>&amp; i : cont) {
+        os &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;
+    }
+    os &lt;&lt; <span class="hljs-string">&quot;]&quot;</span>;
+    <span class="hljs-keyword">return</span> os;
+}
+
+<span class="hljs-comment">// Test case: numerical1</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+
+<span class="hljs-comment">// Test case: numerical2</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+
+<span class="hljs-comment">// Test case: numerical3</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+
+<span class="hljs-comment">// Test case: same</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+
+<span class="hljs-comment">// Test case: one_out</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;({<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+
+<span class="hljs-comment">// Test case: alpha</span>
+{
+    <span class="hljs-keyword">auto</span> v = std::<span class="hljs-built_in">vector</span>&lt;std::string&gt;({<span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;cba&quot;</span>, <span class="hljs-string">&quot;bde&quot;</span>});
+    mtrn2500::<span class="hljs-built_in">invert_element_order</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());
+    <span class="hljs-keyword">auto</span> w = std::<span class="hljs-built_in">vector</span>&lt;std::string&gt;({<span class="hljs-string">&quot;cba&quot;</span>, <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;bde&quot;</span>});
+    <span class="hljs-built_in">assert</span>(w == v);
+}
+</code></pre>
+</details>
+<hr>
+<h2 id="webots-iii-state-optional">Webots III (state, optional)</h2>
+<details>
+  <summary><b>View tasks</b></summary>
+<h3 id="drawing-a-state-diagram">Drawing a State Diagram</h3>
+<p>State diagrams are used to describe the behaviour of a system.</p>
+<p>The most important components of a state diagram consists of:</p>
+<ul>
+<li>
+<p><strong>States</strong> are represented as boxes. A state usually describes an action that the system is doing.</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    A
+</code></pre>
+</li>
+<li>
+<p><strong>Transitions</strong> are represented as arrows. A transition is always required to move from one state to another.</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    A --&gt; B
+    A
+    B
+</code></pre>
+</li>
+<li>
+<p><strong>Forks</strong> are represented as diamonds. Forks describe the <code>if-else</code> statement i.e. the ability to branch.</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    state my_if_else &lt;&lt;choice&gt;&gt;
+    my_if_else --&gt; A: Go to A if ...
+    my_if_else --&gt; B: Go to B if ...
+</code></pre>
+<p>It is good practice to label your transitions to define when this transition occurs.</p>
+</li>
+</ul>
+<blockquote>
+<p>You may use other shapes to represent components of your state diagram, just ensure consistency.</p>
+</blockquote>
+<p>There are a variety of tools that you can use to create state diagrams:</p>
+<ul>
+<li><a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a>.</li>
+<li><a href="https://app.diagrams.net/">draw.io/diagrams.net</a>.</li>
+<li><a href="https://www.lucidchart.com/pages/">Lucidchart</a>.</li>
+</ul>
+<hr>
+<h3 id="exercise-designing-a-state-diagram">Exercise: Designing a State Diagram</h3>
+<p>Robot software design can be approached top-down i.e. identifying the problem requirements, defining the robot functionality (with the help of a diagram or interface), then implementing the functionality.</p>
+<p>Design and draw a state diagram which solves the following problem:</p>
+<blockquote>
+<p>A palletiser is required to pick and place some unknown number of parcels from zone A to zone B. Zone A uses a scale sensor to indicate if there is a parcel in zone A or not.</p>
+</blockquote>
+<hr>
+<h3 id="exercise-implementing-a-state-diagram">Exercise: Implementing a State Diagram</h3>
+<p>Create a controller, <code>state_controller</code>, with a class, <code>StateRobot</code>, which inherits <code>BaseRobot</code>. Override <code>StateRobot::run()</code> so the control loop matches the following state diagram.</p>
+<p>You may only have one <code>webots::Robot::step()</code> loop.</p>
+<blockquote>
+<p>It may be helpful to use flags to indicate the current mode and non-blocking timer (given) to control transition between states.</p>
+</blockquote>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; input
+
+    state if &lt;&lt;choice&gt;&gt;
+    input --&gt; if
+
+    if --&gt; teleop: If auto mode disabled
+    teleop --&gt; input
+
+    if --&gt; disable_auto:  If 'e' pressed and auto mode enabled
+    disable_auto --&gt; halt_after_input
+    halt_after_input --&gt; input
+
+    if --&gt; auto: If auto mode enabled
+    auto --&gt; input
+
+    if --&gt; enable_auto: If 'e' pressed and auto mode disabled
+    enable_auto --&gt; halt_after_input
+    halt_after_input --&gt; input
+
+    if --&gt; Halt: If 'q' pressed
+    Halt --&gt; [*]
+
+    teleop: Teleoperation mode
+    state teleop {
+        state if_teleop &lt;&lt;choice&gt;&gt;
+        [*] --&gt; if_teleop
+        if_teleop --&gt; w: If 'w' pressed
+        if_teleop --&gt; a: If 'a' pressed
+        if_teleop --&gt; s: If 's' pressed
+        if_teleop --&gt; d: If 'd' pressed
+        state end_teleop &lt;&lt;join&gt;&gt;
+        w --&gt; end_teleop
+        a --&gt; end_teleop
+        s --&gt; end_teleop
+        d --&gt; end_teleop
+        end_teleop --&gt; [*]
+
+        w: Move forward
+        a: Move backward
+        s: Rotate left
+        d: Rotate right
+    }
+
+    auto: Autonomous mode
+    state auto {
+        [*] --&gt; forward
+        forward --&gt; backward
+        backward --&gt; forward
+        forward: Move forward for 1 s
+        backward: Move backward for 1 s
+    }
+
+    halt_after_input: Halt
+    input: Get key input
+    disable_auto: Disable auto mode
+    enable_auto: Enable auto mode
+</code></pre>
+</details>
+<hr>
+
+        
+        
+    </body>
+    </html>
